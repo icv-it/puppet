@@ -246,11 +246,12 @@ class postgresql::params inherits postgresql::globals {
 
   $initdb_path          = pick($initdb_path, "${bindir}/initdb")
   $createdb_path        = pick($createdb_path, "${bindir}/createdb")
+#  $createdb_path        = "/usr/bin:/usr/sbin:/bin"
   $pg_hba_conf_path     = pick($pg_hba_conf_path, "${confdir}/pg_hba.conf")
   $pg_hba_conf_defaults = pick($pg_hba_conf_defaults, true)
   $pg_ident_conf_path   = pick($pg_ident_conf_path, "${confdir}/pg_ident.conf")
   $postgresql_conf_path = pick($postgresql_conf_path, "${confdir}/postgresql.conf")
   $default_database     = pick($default_database, 'postgres')
 
- fail("<<<$ceratedb_path>>>")
+#fail("<<<$createdb_path>>>")
 }
