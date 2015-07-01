@@ -1,33 +1,48 @@
 node 'vagrant-ubuntu-trusty-64' {
+
     notice("Hello world.")
 
-#    class { 'postgresql::server':
-#        listen_addresses           => 'localhost',
-#    }
+    include redis
 
-    $dbname = 'gugus'
-    $dbuser = 'gitlab'    
+    $dbname = 'gitlabhq_production'
+    $dbuser = 'gitlab'
     $dbpwd  = 'GHodkAhliESu0q69fsaz'
+    $dbrootpwd = '13rbQK9jQJHQO49IhI8b'
 
-    postgresql::server::db { $dbname :
-        user     => $dbuser,
-        password => postgresql_password($dbuser, $dbpwd),
+    class { 'ruby':
+        gems_version  => 'latest'
     }
 
-    class { 'nginx': }
+    class { '::mysql::server':
+        root_password           => $dbrootpwd,
+        remove_default_accounts => true,
+        override_options        => $override_options,
+    }
 
+    mysql::db { $dbname:
+        user     => $dbuser,
+        password => $dbpwd,
+        host     => 'localhost',
+        grant    => ['ALL'],
+    }
+
+
+->
+
+    class { 'nginx': }
 
 
     class { 'gitlab':
         git_email         => 'it@i-cv.ch',
         git_comment       => 'GitLab',
-        gitlab_domain     => 'gitlab.icv.ch',
-        gitlab_dbtype     => 'pgsql',
+        gitlab_domain     => 'gitlab.i-cv.ch',
+        gitlab_dbtype     => 'mysql',
         gitlab_dbname     => $dbname,
         gitlab_dbuser     => $dbuser,
         gitlab_dbpwd      => $dbpwd,
         ldap_enabled      => false,
     }
 
-
 }
+
+
