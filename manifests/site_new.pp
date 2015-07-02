@@ -4,10 +4,21 @@ node 'vagrant-ubuntu-trusty-64' {
 
     # make sure all required packages are installed
 
-     package { 'ntp':
-         ensure => installed,
-     }
-
+    package { 'ntp':
+        ensure => installed,
+    }
+    package { 'thomasvandoren/redis':
+        ensure => installed,
+    }
+    package { 'mysql':
+        ensure => installed,
+    }
+    package { 'jfryman-nginx':
+        ensure => installed,
+    }
+    package { 'sbadia-gitlab':
+        ensure => installed,
+    }
 
 
     include redis
